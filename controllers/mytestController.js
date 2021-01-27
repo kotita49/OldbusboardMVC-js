@@ -25,7 +25,7 @@ exports.getBusData = (req, res) => {
     busboard(req.params.postcode, res);
 }
 
-function extractLatLong(postcodeResponse, res){
+function extractLatLong(postcodeResponse){
     return {
         "latitude": postcodeResponse.result.latitude,
         "longitude": postcodeResponse.result.longitude
@@ -42,6 +42,18 @@ function extractLatLong(postcodeResponse, res){
             
             if (!result) {
                 res.render('invalid.ejs')
+            }else{
+                var postcodeRequest = new XMLHttpRequest();
+postcodeRequest.open('GET', 'http://api.postcodes.io/postcodes/'+postcode, true)
+postcodeRequest.onload = function () {
+     const postcodeResponse = JSON.parse(postcodeRequest.responseText);
+     //console.log(postcodeResponse);
+     const location = extractLatLong(postcodeResponse);
+     findNearestStops(location, res, postcode);                             
+     }
+     
+postcodeRequest.send();
+
             } 
         }
         validRequest.send();
@@ -49,21 +61,12 @@ function extractLatLong(postcodeResponse, res){
 
 function busboard(postcode, res){
     checkPostcodeValid(postcode, res);
-    var postcodeRequest = new XMLHttpRequest();
-postcodeRequest.open('GET', 'http://api.postcodes.io/postcodes/'+postcode, true)
-postcodeRequest.onload = function () {
-     const postcodeResponse = JSON.parse(postcodeRequest.responseText);
-     //console.log(postcodeResponse);
-     const location = extractLatLong(postcodeResponse);
-     findNearestStops(location, res);                             
-     }
-     
-postcodeRequest.send();
+    
 }
 
 
 
-    function findNearestStops(location, res){
+    function findNearestStops(location, res, postcode){
 
         var stopRequest = new XMLHttpRequest();
         var postcodeurl = `http://transportapi.com/v3/uk/places.json?lat=${location.latitude}&lon=${location.longitude}&type=bus_stop&app_id=97d91d05&app_key=b77e693ec08272f32658588da099e89f`;
@@ -73,14 +76,14 @@ postcodeRequest.send();
             const busStop1 = stopResponse.member[0].atcocode;
            // const busStop2 = stopResponse.member[1].atcocode;
       var allBuses = [];
-      findSoonest5Buses(busStop1, res, allBuses);
+      findSoonest5Buses(busStop1, res, allBuses, postcode);
        
         }
         stopRequest.send();
         
         }
 
-        findSoonest5Buses = function(busStop1, res, allBuses) {
+        findSoonest5Buses = function(busStop1, res, allBuses, postcode) {
             var departureBoard = [];
             var request = new XMLHttpRequest();
             var url = `http://transportapi.com/v3/uk/bus/stop/${busStop1}/live.json?group=route&app_id=97d91d05&app_key=b77e693ec08272f32658588da099e89f`;
@@ -111,6 +114,7 @@ postcodeRequest.send();
                 }
                 res.render('mytestView', {
                     data: allBuses,
+                    postcode: postcode,
                 })
            }
            
