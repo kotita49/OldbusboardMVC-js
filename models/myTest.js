@@ -22,7 +22,7 @@ class Bus {
 	};
 
 	printBusData() {
-		let arr = [`Route: ${this.line}`, `Scheduled: ${this.aimed_departure_time}`, `Expected: ${this.expected_departure_time}  `, `Direction: ${this.direction}`];
+		let arr = [`Route: ${this.line}`, `Scheduled: ${this.aimed_departure_time}`, `Expected: ${this.expected_departure_time}`, `Direction: ${this.direction}`];
 		return arr.join('\t');
 	};
 }

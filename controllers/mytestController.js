@@ -92,6 +92,7 @@ function busboard(postcode, res){
 
             var response = JSON.parse(request.responseText);
            var departures = response.departures;
+          
             for (let busRoute in departures) {        
                 departureBoard = departureBoard.concat(departures[busRoute].map(departure => {
                     var bus = new Bus(departure.line, departure.aimed_departure_time, departure.expected_departure_time, departure.direction);
@@ -107,7 +108,11 @@ function busboard(postcode, res){
                     
                 })
                 
-                if (departureBoard.length >= 5) {
+                if(departureBoard.length ==0){
+                    res.render('nobuses.ejs', {
+                        postcode:postcode,
+                    })
+                }else if(departureBoard.length >= 5) {
                     allBuses = departureBoard.slice(0,5);
                 } else {
                     allBuses = departureBoard.slice(0,departureBoard.length)
