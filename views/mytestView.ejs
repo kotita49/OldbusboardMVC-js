@@ -1,4 +1,4 @@
-<!-- views/testView.ejs -->
+<!-- views/mytestView.ejs -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -8,11 +8,11 @@
 </head>
 
 <body id="home">
-	<h1>MVC example</h1>
+	<h1>Bus departures near the location   </h1>
 	<ul>
 		<%
-			data.forEach((person) => { %>
-			<li><b><%= person.showTestData() %></b></li>
+			data.forEach((bus) => { %>
+			<li><b><%= bus.printBusData() %></b></li>
 		<% });
 		%>
 	</ul>
