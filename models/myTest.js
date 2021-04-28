@@ -14,17 +14,14 @@ class Test{
 };
 
 class Bus {
-	constructor(line, aimed_departure_time, expected_departure_time, direction) {
+	constructor(line, direction, expected_departure_time){
 		this.line = line;
-		this.aimed_departure_time = aimed_departure_time;
-		this.expected_departure_time = expected_departure_time;
 		this.direction = direction;
-	};
-
-	printBusData() {
-		let arr = [`Route: ${this.line}`, `Scheduled: ${this.aimed_departure_time}`, `Expected: ${this.expected_departure_time}`, `Direction: ${this.direction}`];
-		return arr.join('\t');
-	};
+		this.expected_departure_time = expected_departure_time
+	}
+	showBusdata(){
+		return "Bus "+ this.line + " direction: " + this.direction + " departs at " + this.expected_departure_time;
+	}
 }
 
 module.exports = Bus;

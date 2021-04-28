@@ -22,11 +22,11 @@
 </head>
 
 <body id="home">
-	<h1>Bus departures near the location  <%=postcode %>   </h1>
+	<h1>Bus departures near the location  <%= postcode %>   </h1>
 	<ul>
 		<%
 			data.forEach((bus) => { %>
-			<li><b><%= bus.printBusData() %></b></li>
+			<li><b><%= bus.showBusdata() %></b></li>
 		<% });
 		%>
 	</ul>
